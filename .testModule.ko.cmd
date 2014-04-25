@@ -1,1 +1,0 @@
-cmd_/home/michael/cmpe142/testModule.ko := ld -r -m elf_i386 -T /usr/src/linux-headers-2.6.32-38-generic/scripts/module-common.lds --build-id -o /home/michael/cmpe142/testModule.ko /home/michael/cmpe142/testModule.o /home/michael/cmpe142/testModule.mod.o
