@@ -1,4 +1,4 @@
-Compile with:
+To compile, navigate to the directory which includes the source and makefile, and use the command:
 
 >make all
 
