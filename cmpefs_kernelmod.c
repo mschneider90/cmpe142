@@ -6,23 +6,27 @@
 extern int register_filesystem(struct file_system_type*);
 extern int unregister_filesystem(struct file_system_type*);
 
+int cmpefs_get_sb(struct file_system_type*, int, const char*, void*, struct vfsmount*);
+void cmpefs_kill_sb(struct super_block*);
+int cmpefs_fill_sb(struct super_block*, void*, int);
+
+struct super_block* cmpefs_sb;
+
 struct file_system_type sjfsInfo = {
 	.name = "cmpefs",
 	.owner = THIS_MODULE,
-	.get_sb = cmpefs_get_sb;
-	.kill_sb = cmpefs_kill_sb;
+	.get_sb = cmpefs_get_sb,
+	.kill_sb = cmpefs_kill_sb,
 	.next = NULL
 };
-
-struct super_block* cmpefs_sb;
 
 int cmpefs_get_sb(struct file_system_type * fstype,
                   int flags,
                   const char* dev_name,
                   void* data,
-                  struct vfsmount* mount);
+                  struct vfsmount* mount)
 {
-	return get_sb_nodev(fstype, flags, data, cmpefs_sb, mount);
+	return get_sb_nodev(fstype, flags, data, cmpefs_fill_sb, mount);
 }
 
 void cmpefs_kill_sb(struct super_block* sb)
@@ -30,17 +34,17 @@ void cmpefs_kill_sb(struct super_block* sb)
 	kill_block_super(cmpefs_sb);
 }
 
-static int __init hello_init()
+static int __init cmpefs_init()
 {
 	return register_filesystem(&sjfsInfo);
 }
 
-static int __exit hello_exit()
+static void __exit cmpefs_exit()
 {
-	return unregister_filesystem(&sjfsInfo);
+	unregister_filesystem(&sjfsInfo);
 }
 
-module_init(hello_init);
-module_exit(hello_exit);
+module_init(cmpefs_init);
+module_exit(cmpefs_exit);
 
 
